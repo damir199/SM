@@ -1,23 +1,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const morgan = require("morgan");
-const app = express();
 
 const postsRoutes = require("./routes/posts");
 
-app.use(morgan("tiny"));
+const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://Damir:Bea27yee1989.@cluster0-szzlz.mongodb.net/posts?retryWrites=true&w=majority",
-    { useNewUrlParser: true }
+    "mongodb+srv://max:QuBqs0T45GDKPlIG@cluster0-ntrwp.mongodb.net/node-angular?retryWrites=true"
   )
   .then(() => {
-    console.log("Connected to Database");
+    console.log("Connected to database!");
   })
   .catch(() => {
-    console.log("There was an error!");
+    console.log("Connection failed!");
   });
 
 app.use(bodyParser.json());
@@ -31,7 +28,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
   next();
 });

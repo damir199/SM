@@ -2,8 +2,9 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
-import { Post } from "./post.model";
 import { Router } from "@angular/router";
+
+import { Post } from "./post.model";
 
 @Injectable({ providedIn: "root" })
 export class PostsService {
@@ -14,9 +15,7 @@ export class PostsService {
 
   getPosts() {
     this.http
-      .get<{ message: string; posts: any }>(
-        "http://192.168.0.26:3000/api/posts"
-      )
+      .get<{ message: string; posts: any }>("http://localhost:3000/api/posts")
       .pipe(
         map(postData => {
           return postData.posts.map(post => {
@@ -40,7 +39,7 @@ export class PostsService {
 
   getPost(id: string) {
     return this.http.get<{ _id: string; title: string; content: string }>(
-      "http://localhost/api/posts/" + id
+      "http://localhost:3000/api/posts/" + id
     );
   }
 
