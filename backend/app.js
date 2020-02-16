@@ -1,12 +1,17 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-
+const morgan = require("morgan");
 const app = express();
+
+const postsRoutes = require("./routes/posts");
+
+app.use(morgan("tiny"));
 
 mongoose
   .connect(
-    "mongodb+srv://Damir:Bea27yee1989.@cluster0-szzlz.mongodb.net/posts?retryWrites=true&w=majority"
+    "mongodb+srv://Damir:Bea27yee1989.@cluster0-szzlz.mongodb.net/posts?retryWrites=true&w=majority",
+    { useNewUrlParser: true }
   )
   .then(() => {
     console.log("Connected to Database");
@@ -14,8 +19,6 @@ mongoose
   .catch(() => {
     console.log("There was an error!");
   });
-
-const Post = require("./models/post");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,33 +36,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/api/posts", (req, res, next) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content
-  });
-  post.save().then(result => {
-    res.status(201).json({
-      message: "Post added successfully",
-      postId: result._id
-    });
-  });
-});
-
-app.get("/api/posts", (req, res, next) => {
-  Post.find().then(documents => {
-    res.status(200).json({
-      message: "Posts fetched successfully!",
-      posts: documents
-    });
-  });
-});
-
-app.delete("/api/posts/:id", (req, res, next) => {
-  Post.deleteOne({ _id: req.params.id }).then(result => {
-    console.log(result);
-    res.status(200).json({ message: "Post Deleted!" });
-  });
-});
+app.use("/api/posts", postsRoutes);
 
 module.exports = app;
