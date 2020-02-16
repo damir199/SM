@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 
 import { PostsService } from "../posts.service";
-import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Post } from "../post.model";
 
 @Component({
@@ -10,20 +10,20 @@ import { Post } from "../post.model";
   templateUrl: "./post-create.component.html",
   styleUrls: ["./post-create.component.css"]
 })
-export class PostCreateComponent {
+export class PostCreateComponent implements OnInit {
   enteredTitle = "";
   enteredContent = "";
-  private mode = "create";
-  private postId: string;
   post: Post;
   isLoading = false;
+  private mode = "create";
+  private postId: string;
 
   constructor(
     public postsService: PostsService,
     public route: ActivatedRoute
   ) {}
 
-  ngOnInnit() {
+  ngOnInit() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("postId")) {
         this.mode = "edit";
@@ -31,11 +31,7 @@ export class PostCreateComponent {
         this.isLoading = true;
         this.postsService.getPost(this.postId).subscribe(postData => {
           this.isLoading = false;
-          this.post = {
-            id: postData._id,
-            title: postData.title,
-            content: postData.content
-          };
+          this.post = {id: postData._id, title: postData.title, content: postData.content};
         });
       } else {
         this.mode = "create";
@@ -48,6 +44,7 @@ export class PostCreateComponent {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;
     if (this.mode === "create") {
       this.postsService.addPost(form.value.title, form.value.content);
     } else {
@@ -57,7 +54,6 @@ export class PostCreateComponent {
         form.value.content
       );
     }
-
     form.resetForm();
   }
 }
