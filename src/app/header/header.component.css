@@ -12,3 +12,13 @@ a {
 .spacer {
   flex: 1 1 auto;
 }
+
+.ulinlineblock {
+  text-align: center;
+  list-style: none;
+  padding: 0;
+}
+.ulinlineblock li {
+  display: inline-block;
+  vertical-align: top;
+}

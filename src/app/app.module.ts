@@ -22,6 +22,7 @@ import { AppRoutingModule } from "./app-routing.module";
     PostCreateComponent,
     HeaderComponent,
     PostListComponent
+    
   ],
   imports: [
     BrowserModule,
